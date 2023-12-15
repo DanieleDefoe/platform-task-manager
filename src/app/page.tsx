@@ -9,7 +9,12 @@ export default function Home() {
       <h1 className="text-3xl text-black font-bold w-full max-w-lg text-center">
         Добро пожаловать в онлайн-платформу для управления задачами!
       </h1>
-      <Link href="/todos">Перейти в списку задач</Link>
+      <Link
+        href="/todos"
+        className="text-xl shandow-md bg-blue-500 text-white hover:bg-blue-400 transition-all px-3 py-1 rounded-md disabled:opacity-80 disabled:pointer-events-none"
+      >
+        Перейти в списку задач
+      </Link>
     </section>
   );
 }
