@@ -1,19 +1,24 @@
 'use client';
 import axios from 'axios';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { Checkbox } from 'primereact/checkbox';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Button } from 'primereact/button';
+import NotFound from './not-found';
 
 interface Props {
   params: { id: string };
 }
 
 export default function EditTodoPage({ params: { id } }: Props) {
-  const [todo, setTodo] = useState<Todo>({ id, desc: '', completed: false });
+  const [todo, setTodo] = useState<Todo | null>({
+    id,
+    desc: '',
+    completed: false,
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [editing, setEditing] = useState<boolean>(false);
   const router = useRouter();
@@ -24,10 +29,8 @@ export default function EditTodoPage({ params: { id } }: Props) {
       const {
         data: { todo: newTodo },
       } = await axios.get<GetOneTodoResponse>(`/api/todos/${id}`);
-
-      if (newTodo) {
-        setTodo(newTodo);
-      }
+      console.log(newTodo);
+      setTodo(newTodo);
 
       setLoading(false);
     })();
@@ -42,6 +45,8 @@ export default function EditTodoPage({ params: { id } }: Props) {
 
   return loading ? (
     <ProgressSpinner />
+  ) : !todo ? (
+    <NotFound />
   ) : (
     <div className="max-w-3xl w-full">
       <Link
@@ -64,7 +69,7 @@ export default function EditTodoPage({ params: { id } }: Props) {
             value={todo.desc}
             onChange={(event) =>
               setTodo((prevTodo) => ({
-                ...prevTodo,
+                ...(prevTodo as Todo),
                 desc: event.target.value,
               }))
             }
@@ -76,8 +81,8 @@ export default function EditTodoPage({ params: { id } }: Props) {
             checked={todo.completed}
             onChange={() =>
               setTodo((prevTodo) => ({
-                ...prevTodo,
-                completed: !prevTodo.completed,
+                ...(prevTodo as Todo),
+                completed: !prevTodo!.completed,
               }))
             }
             className="w-7 h-7 rounded-md border items-center justify-center border-cyan-900 text-black"
