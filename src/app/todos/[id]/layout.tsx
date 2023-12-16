@@ -5,6 +5,14 @@ export const metadata: Metadata = {
   description: 'Страница с описанием задачи',
 };
 
+// export async function generateStaticParams() {
+//   const {
+//     data: { todos },
+//   } = await axios.get<GetTodosResponse>('/api/todos');
+
+//   return todos.map(({ id }) => ({ id }));
+// }
+
 export default function RootLayout({
   children,
 }: {
