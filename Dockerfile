@@ -12,4 +12,4 @@ RUN npm run build
 
 COPY .next ./.next
 
-CMD ["npm", "start"]
+CMD ["npm", "run", 'dev']
